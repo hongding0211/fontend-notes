@@ -1,4 +1,4 @@
-# render\_props
+# Render Props
 
 ### Render Props
 

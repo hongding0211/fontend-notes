@@ -1,4 +1,4 @@
-# state
+# State
 
 ### 把 states 看做一次快照
 

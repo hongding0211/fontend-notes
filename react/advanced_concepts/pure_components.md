@@ -1,4 +1,4 @@
-# pure\_components
+# Pure 组件
 
 ### 什么是纯函数
 

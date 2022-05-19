@@ -1,4 +1,4 @@
-# render\_commit
+# React 渲染过程
 
 ### Concepts
 

@@ -1,6 +1,6 @@
 # Table of contents
 
-* [About](README.md)
+* [🌈 About](README.md)
 
 ## JavaScript
 

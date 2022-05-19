@@ -1,4 +1,4 @@
-# About
+# 🌈 About
 
 ### 🙋 What's this page for?
 

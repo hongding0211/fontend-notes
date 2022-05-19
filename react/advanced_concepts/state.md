@@ -98,3 +98,4 @@ setState(20)			// 20
 ```
 
 最终的 state 值就是 20，React 会把 20 更新到 UI 上去。
+

@@ -32,7 +32,8 @@
   * [useEffect](react/hooks/useeffect.md)
   * [相关概念](react/hooks/hooks.md)
   * [自定义 Hook](react/hooks/custom\_hooks.md)
-* [React 相关问题](react/react.md)
+* [React 相关问题](react/react/README.md)
+  * [Class vs Function](react/react/class-vs-function.md)
 
 ## React Libraries
 

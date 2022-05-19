@@ -70,7 +70,7 @@
 
 ### 生命周期
 
-![](../.gitbook/assets/image-20220330101108425.png)
+![](../../.gitbook/assets/image-20220330101108425.png)
 
 ### hooks
 

@@ -73,10 +73,6 @@
   * [Flex](css/css-xiang-guan-ji-qiao/flex.md)
   * [动画](css/css-xiang-guan-ji-qiao/animation.md)
 
-## Others
-
-* [小程序与原生 Web 的区别](others/miniapp.md)
-
 ## TypeScript
 
 * [Quick Peek](typescript/quick\_peek.md)
@@ -93,3 +89,7 @@
   * [开发环境配置](workflow/webpack/development.md)
   * [生产环境配置](workflow/webpack/production.md)
   * [优化代码运行性能](workflow/webpack/performance.md)
+
+## Others
+
+* [小程序与原生 Web 的区别](others/miniapp.md)

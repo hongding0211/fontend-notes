@@ -18,6 +18,7 @@
 * [核心概念](react/core\_concepts.md)
 * [深入理解](react/advanced\_concepts/README.md)
   * [State](react/advanced\_concepts/state.md)
+  * [如何管理 State](react/advanced\_concepts/ru-he-guan-li-state.md)
   * [React 渲染过程](react/advanced\_concepts/render\_commit.md)
   * [处理 DOM 事件](react/advanced\_concepts/handle\_events.md)
   * [Pure 组件](react/advanced\_concepts/pure\_components.md)

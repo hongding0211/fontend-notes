@@ -48,6 +48,8 @@
 ## Vue
 
 * [Introduction](vue/introduction.md)
+* [深入理解](vue/shen-ru-li-jie/README.md)
+  * [Composition vs Options](vue/shen-ru-li-jie/composition-vs-options.md)
 
 ## Network
 

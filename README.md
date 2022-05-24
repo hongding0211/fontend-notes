@@ -6,7 +6,7 @@
 
 [🔗 Online Page](https://blog.hong97.ltd)
 
-[![Github](https://img.shields.io/badge/Github Repo-100000.svg?logo=github&logoColor=white)](https://github.com/hongding0211/frontend-notes)
+[![Github](https://img.shields.io/badge/GitHub_Repo-100000.svg?logo=github&logoColor=white)](https://github.com/hongding0211/frontend-notes)
 
 ### 🤪 About Me
 

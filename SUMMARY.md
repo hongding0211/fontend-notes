@@ -47,7 +47,7 @@
 
 ## Vue
 
-* [Introduction](vue/introduction.md)
+* [Vue 2](vue/vue-2.md)
 * [深入理解](vue/shen-ru-li-jie/README.md)
   * [Composition vs Options](vue/shen-ru-li-jie/composition-vs-options.md)
 

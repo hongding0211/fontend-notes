@@ -47,8 +47,6 @@
 
 ## Vue
 
-* [Vue 2](vue/vue-2/README.md)
-  * [计算属性 & 侦听器](vue/vue-2/ji-suan-shu-xing-zhen-ting-qi.md)
 * [深入理解](vue/shen-ru-li-jie/README.md)
   * [Composition vs Options](vue/shen-ru-li-jie/composition-vs-options.md)
 

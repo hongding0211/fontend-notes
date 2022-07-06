@@ -4,6 +4,7 @@
 
 ## JavaScript
 
+* [Promise](javascript/promise.md)
 * [Event Loop 事件循环](javascript/eventloop.md)
 * [Prototype 原型](javascript/prototype.md)
 * [this](javascript/this.md)

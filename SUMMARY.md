@@ -5,11 +5,11 @@
 ## JavaScript
 
 * [Promise](javascript/promise.md)
-* [Event Loop 事件循环](javascript/eventloop.md)
-* [Prototype 原型](javascript/prototype.md)
-* [this](javascript/this.md)
-* [Context 执行上下文](javascript/context.md)
-* [JavaScript 相关概念](javascript/js.md)
+* [JavaScript 相关概念](javascript/js/README.md)
+  * [Event Loop 事件循环](javascript/js/eventloop.md)
+  * [Prototype 原型](javascript/js/prototype.md)
+  * [Context 执行上下文](javascript/js/context.md)
+  * [this](javascript/js/this.md)
 * [JavaScript 常见问题](javascript/javascript-chang-jian-wen-ti/README.md)
   * [手写实现](javascript/javascript-chang-jian-wen-ti/js\_codes.md)
   * [看代码输出](javascript/javascript-chang-jian-wen-ti/js\_output.md)

@@ -19,7 +19,7 @@
 
 Event Loop:
 
-![](../.gitbook/assets/image-20220406144047371.png)
+![](../../.gitbook/assets/image-20220406144047371.png)
 
 ```javascript
 setTimeout(() => { 

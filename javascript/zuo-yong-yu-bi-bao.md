@@ -24,11 +24,11 @@
 可以理解为 Retrieve his source value （取到他的源值），**来获取变量的值**
 
 ```javascript
-function foo(n) {		// 这里其实有个隐式赋值 n = 2，对 n 做了一次 LHS
-    console.log(n)		// 对 n 做了一次 RHS，并且对 console 也做了一次 RHS
+function foo(n) {	// 这里其实有个隐式赋值 n = 2，对 n 做了一次 LHS
+    console.log(n)	// 对 n 做了一次 RHS，并且对 console 也做了一次 RHS
 }
 
-foo(2)					// 对 foo 做了一次 RHS，来找到函数
+foo(2)	// 对 foo 做了一次 RHS，来找到函数
 ```
 
 ### 查询错误
@@ -42,7 +42,7 @@ foo(2)					// 对 foo 做了一次 RHS，来找到函数
   > 如访问 null 的属性，会抛出 TypeError
 
   ```javascript
-  var a = b		// RHS 查询失败，ReferenceError: b is not defined
+  var a = b	// RHS 查询失败，ReferenceError: b is not defined
   ```
 
   
@@ -56,7 +56,7 @@ foo(2)					// 对 foo 做了一次 RHS，来找到函数
   ```javascript
   "use strict"
   
-  a = 0		// 在严格模式下 LHS 抛出异常：Uncaught ReferenceError ReferenceError: a is not defined
+  a = 0	// 在严格模式下 LHS 抛出异常：Uncaught ReferenceError ReferenceError: a is not defined
   ```
 
 > ReferenceError 表示作用域判别失败；TypeError 表示作用域判别成功，但是对结果的操作是不合理的。

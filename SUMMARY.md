@@ -4,7 +4,8 @@
 
 ## JavaScript
 
-* [作用域 & 闭包](javascript/zuo-yong-yu-bi-bao.md)
+* [作用域](javascript/zuo-yong-yu-bi-bao.md)
+* [闭包](javascript/bi-bao.md)
 * [Promise](javascript/promise.md)
 * [JavaScript 相关概念](javascript/js/README.md)
   * [Event Loop 事件循环](javascript/js/eventloop.md)

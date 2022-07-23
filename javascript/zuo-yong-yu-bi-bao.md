@@ -63,3 +63,86 @@ foo(2)	// 对 foo 做了一次 RHS，来找到函数
 
 ## 词法作用域
 
+**JavaScript 和大部分语言一样，使用的都是词法作用域。**尽管 this 可以模拟类似动态作用域的行为（后文展开）。
+
+词法作用域即：定义在词法阶段的作用域。换言之，**他是由你在写代码时将变量放置的位置所决定的**。（大部分如此，例外在后面展开）
+
+### 查找
+
+作用域查找会在**第一个匹配**时停止。
+
+此外，如果访问 `foo.bar.baz` 只会对第一个标识符 `foo` 进行查找，查询成功后，`bar`, `baz` 由对象属性访问规则接管
+
+#### 遮蔽
+
+如果多个层级存在同名变量，内部标识符会遮蔽外部标识符。例如：
+
+```javascript
+var a = 0
+
+function foo() {
+    var a = 1
+    console.log(a)        // 1
+    console.log(window.a) // 0
+}
+
+foo()
+```
+
+可以使用 `window` 来“越级”访问变量 a。避免了 a 被内部作用域遮蔽。
+
+### 改变词法作用域
+
+可以通过一些技巧来在运行时改变词法作用域
+
+#### eval
+
+eval 执行了传入的 str，覆盖了全局变量 a：
+
+```javascript
+var a = 0
+
+function foo(str) {
+    eval(str)
+    console.log(a)  // 1
+}
+
+foo('var a = 1')
+```
+
+在严格模式下，eval 会有自己的作用域：
+
+```javascript
+var a = 0
+
+function foo(str) {
+    "use strict"
+    eval(str)
+    console.log(a)  // 0
+}
+
+foo('var a = 1')    
+```
+
+#### with
+
+在 with 中可以产生一个 LHS，就可以在全局变量中创建一个变量：
+
+```javascript
+function foo(obj) {
+    with (obj) {
+        a = 0
+        b = 1 //  LHS 自动在全局创建了一个变量 b，并为他赋值 1
+    }
+}
+
+var obj = {
+    a: undefined
+}
+
+foo(obj)
+
+console.log(obj.a) // 0
+console.log(b)     // 1
+```
+

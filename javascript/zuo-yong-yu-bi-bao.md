@@ -1,4 +1,4 @@
-# 作用域 & 闭包
+# 作用域
 
 ## 作用域
 
@@ -6,8 +6,8 @@
 
 对于 `var a = 0` 这一操作，可以分解成如下：
 
-- 如果变量 a 在作用域中不存在，**编译器**就在作用域中声明一个
-- **在运行时**引擎在作用域查找该变量，并且为它赋值
+* 如果变量 a 在作用域中不存在，**编译器**就在作用域中声明一个
+* **在运行时**引擎在作用域查找该变量，并且为它赋值
 
 > 也就是说，var a = 0 是拆分成编译和运行时两个部分的
 >
@@ -35,35 +35,32 @@ foo(2)	// 对 foo 做了一次 RHS，来找到函数
 
 对于还未声明的变量，进行 LHS 和 RHS 查询抛出的异常不同：
 
-- RHS 在查询失败时，会抛出 ReferenceError
+*   RHS 在查询失败时，会抛出 ReferenceError
 
-  > RHS 查询成功后，但如果对变量的值进行不合理的操作的时候
-  >
-  > 如访问 null 的属性，会抛出 TypeError
+    > RHS 查询成功后，但如果对变量的值进行不合理的操作的时候
+    >
+    > 如访问 null 的属性，会抛出 TypeError
 
-  ```javascript
-  var a = b	// RHS 查询失败，ReferenceError: b is not defined
-  ```
+    ```javascript
+    var a = b	// RHS 查询失败，ReferenceError: b is not defined
+    ```
+*   LHS 在查询失败时，**在非严格模式下**，会创建一个具有该名称的变量
 
-  
+    **具体来说，如果在顶层都无法找到变量，就会在全局作用域内创建一个变量**
 
-- LHS 在查询失败时，**在非严格模式下**，会创建一个具有该名称的变量
+    > 在严格模式下，LHS 查询失败时也会抛出 ReferenceError
 
-  **具体来说，如果在顶层都无法找到变量，就会在全局作用域内创建一个变量**
+    ```javascript
+    "use strict"
 
-  > 在严格模式下，LHS 查询失败时也会抛出 ReferenceError
-
-  ```javascript
-  "use strict"
-  
-  a = 0	// 在严格模式下 LHS 抛出异常：Uncaught ReferenceError ReferenceError: a is not defined
-  ```
+    a = 0	// 在严格模式下 LHS 抛出异常：Uncaught ReferenceError ReferenceError: a is not defined
+    ```
 
 > ReferenceError 表示作用域判别失败；TypeError 表示作用域判别成功，但是对结果的操作是不合理的。
 
 ## 词法作用域
 
-**JavaScript 和大部分语言一样，使用的都是词法作用域。**尽管 this 可以模拟类似动态作用域的行为（后文展开）。
+\*\*JavaScript 和大部分语言一样，使用的都是词法作用域。\*\*尽管 this 可以模拟类似动态作用域的行为（后文展开）。
 
 词法作用域即：定义在词法阶段的作用域。换言之，**他是由你在写代码时将变量放置的位置所决定的**。（大部分如此，例外在后面展开）
 
@@ -145,4 +142,6 @@ foo(obj)
 console.log(obj.a) // 0
 console.log(b)     // 1
 ```
+
+## 函数作用域
 

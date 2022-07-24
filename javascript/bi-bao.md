@@ -95,3 +95,54 @@ for (let i = 0; i < 5; i++) {
 这种写法就能得到正确的输出结果，他的原理是：
 
 `for` 循环头部的 `let` 声明有一个特殊行为：变量在循环过程中不止会被声明一次，而是**每次迭代都会声明一次**。每一次声明，都是用上次循环结束的值进行赋值。
+
+## 用闭包封装模块
+
+下面就是一种模块封装的基本形式：
+
+```javascript
+function FooModule() {
+    var name = 'bar'
+
+    function sayHello() {
+        console.log(`Hello, ${name}`)
+    }
+
+    return {
+        sayHello
+    }
+}
+
+var foo = FooModule()
+
+foo.sayHello()  // Hello, bar
+```
+
+这种模块封装的方式就利用到了闭包的特性。他**具备以下两个必要条件**：
+
+* **必须有一个外部封装函数，并且需要被调用一次**（每调用一次就创建一个新的模块实例）
+* 返回的内容中**必须持有一个内部函数**，这样才能保证对封装函数内部的作用域引用（形成闭包）
+
+模块往往只需要被调用一次，因此可以采用 IIFE 的写法：
+
+```javascript
+var fooModule = (function() {
+    var name = 'bar'
+
+    function sayHello() {
+        console.log(`Hello, ${name}`)
+    }
+
+    return {
+        sayHello
+    }
+})()
+
+fooModule.sayHello()  // Hello, bar
+```
+
+### 模块机制
+
+
+
+### ES6 模块机制

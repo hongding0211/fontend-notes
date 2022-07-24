@@ -1,4 +1,4 @@
-# 作用域
+# 作用域 & 闭包
 
 ## 作用域
 
@@ -6,8 +6,8 @@
 
 对于 `var a = 0` 这一操作，可以分解成如下：
 
-* 如果变量 a 在作用域中不存在，**编译器**就在作用域中声明一个
-* **在运行时**引擎在作用域查找该变量，并且为它赋值
+- 如果变量 a 在作用域中不存在，**编译器**就在作用域中声明一个
+- **在运行时**引擎在作用域查找该变量，并且为它赋值
 
 > 也就是说，var a = 0 是拆分成编译和运行时两个部分的
 >
@@ -35,32 +35,35 @@ foo(2)	// 对 foo 做了一次 RHS，来找到函数
 
 对于还未声明的变量，进行 LHS 和 RHS 查询抛出的异常不同：
 
-*   RHS 在查询失败时，会抛出 ReferenceError
+- RHS 在查询失败时，会抛出 ReferenceError
 
-    > RHS 查询成功后，但如果对变量的值进行不合理的操作的时候
-    >
-    > 如访问 null 的属性，会抛出 TypeError
+  > RHS 查询成功后，但如果对变量的值进行不合理的操作的时候
+  >
+  > 如访问 null 的属性，会抛出 TypeError
 
-    ```javascript
-    var a = b	// RHS 查询失败，ReferenceError: b is not defined
-    ```
-*   LHS 在查询失败时，**在非严格模式下**，会创建一个具有该名称的变量
+  ```javascript
+  var a = b	// RHS 查询失败，ReferenceError: b is not defined
+  ```
 
-    **具体来说，如果在顶层都无法找到变量，就会在全局作用域内创建一个变量**
+  
 
-    > 在严格模式下，LHS 查询失败时也会抛出 ReferenceError
+- LHS 在查询失败时，**在非严格模式下**，会创建一个具有该名称的变量
 
-    ```javascript
-    "use strict"
+  **具体来说，如果在顶层都无法找到变量，就会在全局作用域内创建一个变量**
 
-    a = 0	// 在严格模式下 LHS 抛出异常：Uncaught ReferenceError ReferenceError: a is not defined
-    ```
+  > 在严格模式下，LHS 查询失败时也会抛出 ReferenceError
+
+  ```javascript
+  "use strict"
+  
+  a = 0	// 在严格模式下 LHS 抛出异常：Uncaught ReferenceError ReferenceError: a is not defined
+  ```
 
 > ReferenceError 表示作用域判别失败；TypeError 表示作用域判别成功，但是对结果的操作是不合理的。
 
 ## 词法作用域
 
-\*\*JavaScript 和大部分语言一样，使用的都是词法作用域。\*\*尽管 this 可以模拟类似动态作用域的行为（后文展开）。
+**JavaScript 和大部分语言一样，使用的都是词法作用域。**尽管 this 可以模拟类似动态作用域的行为（后文展开）。
 
 词法作用域即：定义在词法阶段的作用域。换言之，**他是由你在写代码时将变量放置的位置所决定的**。（大部分如此，例外在后面展开）
 
@@ -141,133 +144,5 @@ foo(obj)
 
 console.log(obj.a) // 0
 console.log(b)     // 1
-```
-
-## 函数作用域
-
-### 函数声明 vs 函数表达式
-
-一种最简单的区分函数声明和函数表达式的方式，就是看 `function` 关键字是否出现在声明中的第一个词。如果是，那就是函数声明。
-
-他们之间的区别就是：**他们的名称标识符会被绑定在哪里**：
-
-```javascript
-// 绑定在全局作用域
-function foo() {}     // 函数声明
-
-// 绑定在自身的函数作用域中
-(function foo() {})   // 函数表达式
-```
-
-### 具名函数 vs 匿名函数
-
-> 函数声明不允许使用匿名函数
-
-相比具名函数，匿名函数的缺陷是：
-
-* 在调用栈上不能显示名称，不利于调试
-* 不能通过函数名递归地调用自己
-* 可读性较差
-
-下面的这种写法也是允许的，因此你也可以使用具名函数：
-
-```javascript
-setTimeout(function foo() {
-    console.log('bar')
-}, 0)
-```
-
-### IIFE 立即执行函数
-
-> IIFE 也可以接受具名函数
-
-```javascript
-var a = 0;
-
-(function() {
-    var a = 1;
-    console.log(a);  // 1
-})();
-
-console.log(a);      // 0
-```
-
-当然，还可以传入参数：
-
-```javascript
-var a = 0;
-
-(function(global) {
-    console.log(global.a)  // 0
-})(window)
-```
-
-#### 避免 undefined 被覆盖问题
-
-有时候 undefined 关键词可能会被污染，因此可以使用 IIFE 来解决。IIFE 接受一个 undefined 参数，但在对应的位置不要传入他：
-
-```javascript
-// JavaScript 允许下面的写法
-var undefined = true;
-
-(function(undefined) {
-    console.log(undefined);    // undefined
-})();                          // 不要传入参数
-
-console.log(undefined);        // true
-```
-
-## 块作用域
-
-JavaScript 虽然会创建函数作用域，但有些情况下并不会创建块级作用域 `{ }`&#x20;
-
-```javascript
-if (false) {
-    var foo = 'bar'  // if 语句中的 foo 其实是在全局作用域中
-}
-
-console.log(foo)     // undefined
-```
-
-或者一个更常见的例子，在 `for` 语句中：
-
-```javascript
-// 变量 i 其实是创建在全局作用域中的
-for (var i = 0; i < 10; i++) {}
-
-console.log(i)      // 10
-```
-
-### 创建块级作用域的方式
-
-在上面的例子中，并不会创建块级作用域。但是在另一些情况下，可以创建：
-
-* with
-* catch 块
-
-#### catch 块
-
-`catch` 语句可以创建一个块级作用域，因此可以利用这个技巧来创建一个块级作用域：
-
-```javascript
-try {
-    throw 0
-} catch (foo) {
-    console.log(foo)  // 0
-}
-
-console.log(foo)      // ReferrenceError
-```
-
-### let
-
-使用 `let` 关键词创建的变量会**将该变量劫持在所在的块作用域中**：
-
-```javascript
-if (false) {
-    let foo = 'bar'  // foo 在块级作用域中
-}
-
-console.log(foo)     // ReferenceError
 ```
 

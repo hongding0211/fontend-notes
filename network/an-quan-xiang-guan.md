@@ -18,7 +18,7 @@ if (top.location != self.location)    self.location.replace('http://baidu.com')
 >
 > window.self: 指向当前 window 自己
 
-![](../.gitbook/assets/image-20220402174946498.png)
+![](<../.gitbook/assets/image-20220402174946498 (1).png>)
 
 #### 如何防止 iframe 对外部的一些副作用
 

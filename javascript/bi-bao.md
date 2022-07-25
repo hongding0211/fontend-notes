@@ -195,4 +195,8 @@ bar.helloFromBar()  // Hello, bar
 
 这边 apply 传入的 deps 就是可以被内部函数（ return 出来的 helloFromBar）利用闭包来捕获。
 
-也就是说，对于模块 bar，传入了一个依赖模块 foo。那么模块 foo 就存在 bar 模块的此法作用域中。当你在外面调用 bar 模块暴露的内部函数，内部函数仍然可以访问到 foo。即：**bar 成功依赖于 foo**，foo 存在于 bar 的闭包里。
+也就是说，对于模块 bar，传入了一个依赖模块 foo。那么模块 foo 就存在 bar 模块的词法作用域中。
+
+当你在外面调用 bar 模块暴露的内部函数时，内部函数仍然可以访问到模块 foo。
+
+即：**bar 成功依赖于 foo**，foo 存在于 bar 的闭包里。

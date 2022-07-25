@@ -143,6 +143,56 @@ fooModule.sayHello()  // Hello, bar
 
 ### 模块机制
 
+现代的模块机制使用类似于下面的结构：
 
+```javascript
+var MyModules = (function () {
+    var modules = {}
 
-### ES6 模块机制
+    function define(name, deps, impl) {
+        for (var i = 0; i < deps.length; i++) {
+            deps[i] = modules[deps[i]]
+        }
+        modules[name] = impl.apply(impl, deps)
+    }
+
+    function get(name) {
+        return modules[name]
+    }
+
+    return {
+        define,
+        get
+    }
+})()
+
+MyModules.define('foo', [], function() {
+    function hello(name) {
+        console.log(`Hello, ${name}`)
+    }
+
+    return {
+        hello
+    }
+})
+
+MyModules.define('bar', ['foo'], function(foo) {
+    function helloFromBar() {
+        foo.hello('bar')
+    }
+
+    return {
+        helloFromBar
+    }
+})
+
+var bar = MyModules.get('bar')
+
+bar.helloFromBar()  // Hello, bar
+```
+
+这里最核心的就是：`modules[name] = impl.apply(impl, deps)`
+
+这边 apply 传入的 deps 就是可以被内部函数（ return 出来的 helloFromBar）利用闭包来捕获。
+
+也就是说，对于模块 bar，传入了一个依赖模块 foo。那么模块 foo 就存在 bar 模块的此法作用域中。当你在外面调用 bar 模块暴露的内部函数，内部函数仍然可以访问到 foo。即：**bar 成功依赖于 foo**，foo 存在于 bar 的闭包里。

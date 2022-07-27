@@ -91,3 +91,62 @@ console.log(foo.count)  // 10
 
 > 当函数在调用时，会创建一个活动记录。包含调用栈，函数调用的方式，传入的参数等。`this` 就是其中的一个属性。
 
+## 绑定规则
+
+### &#x20;默认绑定
+
+> 默认绑定是在无法应用其他规则时的 fallback option
+
+当应用了默认绑定规则，`this` **指向全局对象**。
+
+```javascript
+function foo() {
+    console.log(this.a)
+}
+
+var a = 0
+
+foo()   // 0
+```
+
+上面的代码函数在调用时，应用了默认绑定规则，因此 `this` 指向全局对象
+
+如果使用了严格模式，`this` 会被绑定为 `undefined`
+
+```javascript
+function foo() {
+    "use strict"
+    console.log(this.a)
+}
+
+var a = 0
+
+foo()   // TypeError
+```
+
+> 只有在函数内部应用严格模式才会限制默认绑定规则
+>
+> 相反，在严格模式下调用函数并不会影响默认绑定规则
+
+```javascript
+function foo() {
+    console.log(this.a)
+};
+
+var a = 0;
+
+(function() {
+    "use strict"
+    foo();   // 0 在严格模式下调用函数不影响
+})();
+```
+
+### 隐式绑定
+
+
+
+### 显式绑定
+
+
+
+### new 绑定

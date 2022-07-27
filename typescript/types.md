@@ -102,13 +102,13 @@ interface Animal {
   name: string
 }
 // interface 创建后可以继续添加属性
-interface Aniaml {
+interface Animal {
   age: number
 }
 
-let cat: Cat
+const cat: Animal
 cat.name = 'xxx'
-cat.type = 'xxx'
+cat.age = 1
 ```
 
 ```typescript

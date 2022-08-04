@@ -93,7 +93,7 @@ console.log(foo.count)  // 10
 
 ## 绑定规则
 
-### &#x20;默认绑定
+### 默认绑定
 
 > 默认绑定是在无法应用其他规则时的 fallback option
 
@@ -143,7 +143,98 @@ var a = 0;
 
 ### 隐式绑定
 
+当**函数的引用有上下文对象时**，函数中的 `this` 会绑定到这个上下文对象上：
 
+```javascript
+function foo() {
+    console.log(this.a)
+};
+
+var obj = {
+    foo: foo,
+    a: 0
+}
+
+obj.foo()   // 0
+```
+
+`foo` 被对象 `obj` 引用，调用时 `this` 绑定在 `obj` 上
+
+但是，如果存在引用链，那么以**最后一层调用**为主：
+
+```javascript
+function foo() {
+    console.log(this.a)
+};
+
+var obj1 = {
+    foo: foo,
+    a: 0
+}
+
+var obj2 = {
+    a: 1,
+    obj1: obj1
+}
+
+obj2.obj1.foo() // 0
+```
+
+#### 绑定丢失
+
+在某些情况下，隐式绑定可能会发生绑定丢失。取而代之应用了默认绑定规则
+
+```javascript
+function foo() {
+    console.log(this.a)
+};
+
+var obj = {
+    foo: foo,
+    a: 0
+}
+
+// bar 只是对 foo 的一个引用
+const bar = obj.foo
+
+bar()   // undefined
+```
+
+除此之外，在回调函数中也很容易丢失绑定：
+
+```javascript
+function foo() {
+    console.log(this.a)
+};
+
+function doFoo(fn) {
+    // 这里的 fn 其实是对 foo 的引用
+    fn()
+}
+
+var obj = {
+    foo: foo,
+    a: 0
+}
+
+// 虽然传入给回调函数看起来有隐式绑定，但其实实质上传的只是 foo 的引用
+doFoo(obj.foo)  // undefined
+```
+
+即便是传入给内置的回调函数，如 `setTimeout` 也会发生绑定丢失：
+
+```javascript
+function foo() {
+    console.log(this.a)
+};
+
+var obj = {
+    foo: foo,
+    a: 0
+}
+
+setTimeout(obj.foo, 0) // undefined
+```
 
 ### 显式绑定
 

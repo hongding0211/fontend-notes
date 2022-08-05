@@ -238,6 +238,45 @@ setTimeout(obj.foo, 0) // undefined
 
 ### 显式绑定
 
+我们可以在一个对象内引用一个函数，并用这个对象的属性来调用该函数，从而使得 `this` 隐式绑定到该对象上。但是我们也可以使用显示绑定，将 `this` 绑定到某一特定对象上。
 
+```javascript
+function foo() {
+    console.log(this.a)
+}
+
+var obj = {
+    a: 0
+}
+
+foo.call(obj)   // 0
+```
+
+如果传入的是一个值类型，那么 `call()` 方法会把它包装成一个对象。如：new String(), new Boolean()...&#x20;
+
+> `call` 接受一个个单独的参数，`apply` 接受一个参数数组
+
+#### 硬绑定
+
+```javascript
+function foo() {
+    console.log(this.a)
+}
+
+var obj = {
+    a: 0
+}
+
+var bar = function() {
+    foo.call(obj)
+}
+
+// 无论如何调用 bar，this 始终绑定为 obj
+bar()               // 0
+setTimeout(bar, 0)  // 0
+bar.call({})        // 0
+```
+
+每次调用 `bar` 的时候，在他的内部都会调用一次显示绑定，因此 `obj` 都会被绑定在 `this` 上面。
 
 ### new 绑定

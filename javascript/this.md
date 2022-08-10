@@ -281,6 +281,124 @@ bar.call({})        // 0
 
 ### new 绑定
 
+JavaScript 中的 `new` 关键字只是**对函数的构造调用**，而非构造函数。不要把它和面向对象里的实例化混为一谈
+
+当使用 `new` 调用函数时，将会发生以下四个步骤：
+
+1. 创建一个全新的对象
+2. 将这个对象连接到函数的原型对象上
+3. 将 `this` 绑定到这个对象上
+4. 如果函数自身没有返回对象（返回值类型不算），则返回这个对象（即 `this` ，它目前就是指向该对象）
+
 ### 绑定优先级
 
-## call(), apply(), bind()
+如果想要明确一个 `this` 的绑定，按照以下优先级顺序进行判断：
+
+1. 函数是否存在 `new` 构造调用
+2. 是否使用 `call` `bind` 进行显式绑定
+3. 是否被某一个上下文对象调用，如：`obj.foo()`
+4. 上述规则都不满足时，使用默认绑定；严格模式下绑定到 `undefined`，否则绑定至全局对象
+
+### 例外
+
+*   将 `null` `undefined` 传入 `call`  `apply` `bind` 中会被忽略，转而使用默认绑定
+
+    > 在某些不需要关心`this` 是什么的时候特别有用
+* 在间接引用的情况下应用的是默认绑定规则，而不是隐式绑绑定规则
+
+如果想在 `call` `apply` `bind` 中传入 `null` `undefined` 来应用默认绑定规则，会有可能造成对全局对象的污染，函数中的某些操作可能会修改全局对象中的属性。
+
+一种更加安全的做法是创建一个 DMZ 对象：
+
+```javascript
+function foo() {}
+
+// Object.create(null) 不会创建 Object.prototype，它比 {} 更空
+const DMZ = Object.create(null)
+
+// 你可以用这个 DMZ 来代替 undefined / null，从而实现更安全的调用
+foo.call(DMZ)
+```
+
+## 箭头函数
+
+箭头函数的 `this` 不使用上述 4 种绑定规则。根据**外层的词法作用域**所决定。
+
+具体来说，箭头函数内的 `this` 会继承外层函数的 `this` 绑定：
+
+```javascript
+function foo() {
+    // 箭头函数内的 this 绑定至 foo() 中的 this
+    return () => {
+        console.log(this.a)
+    }
+}
+
+var obj = {
+    a: 0
+}
+
+const bar = foo.call(obj)
+
+bar()   // 0
+```
+
+如果不使用箭头函数，上述代码在调用 `bar()` 时，其实会应用默认绑定规则：
+
+```javascript
+function foo() {
+    return function() {
+        console.log(this.a)
+    }
+}
+
+var obj = {
+    a: 0
+}
+
+var a = 'opps, global'
+
+const bar = foo.call(obj)
+
+// bar 中的 this 绑定到了全局对象上
+bar()   // opps, global
+```
+
+又或者，在回调函数中，如果在不使用箭头函数的情况下，很容易在不知不觉中应用默认绑定：
+
+```javascript
+function foo() {
+    setTimeout(function() {
+        console.log(this.a)
+    }, 0)    
+}
+
+var obj = {
+    a: 0
+}
+
+var a = 'opps, global'
+
+// 你以为给 foo 绑定了 obj，但其实回调函数在调用时已经丢失了 this，转而应用了默认绑定规则！
+foo.call(obj)    // oops, global
+```
+
+在没有 ES6 箭头函数时，可以使用以下方法解决：
+
+```javascript
+function foo() {
+    // 在函数作用域内捕获一个 this, 使用闭包机制
+    var self = this
+    setTimeout(function() {
+        console.log(self.a)
+    }, 0)    
+}
+
+var obj = {
+    a: 0
+}
+
+var a = 'opps, global'
+
+foo.call(obj)   // 0
+```

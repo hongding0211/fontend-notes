@@ -290,6 +290,8 @@ JavaScript 中的 `new` 关键字只是**对函数的构造调用**，而非构�
 3. 将 `this` 绑定到这个对象上
 4. 如果函数自身没有返回对象（返回值类型不算），则返回这个对象（即 `this` ，它目前就是指向该对象）
 
+> `new` 在 JavaScript 中只是一种**函数调用**的方式，并不是什么实例化，千万不要搞混！
+
 ### 绑定优先级
 
 如果想要明确一个 `this` 的绑定，按照以下优先级顺序进行判断：
@@ -320,9 +322,11 @@ const DMZ = Object.create(null)
 foo.call(DMZ)
 ```
 
-### 箭头函数
+## 箭头函数
 
-箭头函数的 `this` 不使用上述 4 种绑定规则。根据**外层的词法作用域**所决定。具体来说，箭头函数内的 `this` 会继承外层函数的 `this` 绑定：
+箭头函数的 `this` 不使用上述 4 种绑定规则。根据**外层的词法作用域**所决定。
+
+具体来说，箭头函数内的 `this` 会继承外层函数的 `this` 绑定：
 
 ```javascript
 function foo() {
@@ -360,4 +364,43 @@ const bar = foo.call(obj)
 
 // bar 中的 this 绑定到了全局对象上
 bar()   // opps, global
+```
+
+又或者，在回调函数中，如果在不使用箭头函数的情况下，很容易在不知不觉中应用默认绑定：
+
+```javascript
+function foo() {
+    setTimeout(function() {
+        console.log(this.a)
+    }, 0)    
+}
+
+var obj = {
+    a: 0
+}
+
+var a = 'opps, global'
+
+// 你以为给 foo 绑定了 obj，但其实回调函数在调用时已经丢失了 this，转而应用了默认绑定规则！
+foo.call(obj)    // oops, global
+```
+
+在没有 ES6 箭头函数时，可以使用以下方法解决：
+
+```javascript
+function foo() {
+    // 在函数作用域内捕获一个 this, 使用闭包机制
+    var self = this
+    setTimeout(function() {
+        console.log(self.a)
+    }, 0)    
+}
+
+var obj = {
+    a: 0
+}
+
+var a = 'opps, global'
+
+foo.call(obj)   // 0
 ```

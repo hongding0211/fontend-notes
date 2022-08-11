@@ -6,8 +6,10 @@
 
 * [作用域](javascript/zuo-yong-yu-bi-bao.md)
 * [闭包](javascript/bi-bao.md)
-* [this](javascript/this/README.md)
+* [this](javascript/this.md)
   * [bind()](javascript/this/bind.md)
+* [原型](javascript/yuan-xing.md)
+* [对象](javascript/dui-xiang.md)
 * [JavaScript 相关概念](javascript/js/README.md)
   * [Event Loop 事件循环](javascript/js/eventloop.md)
   * [Prototype 原型](javascript/js/prototype.md)

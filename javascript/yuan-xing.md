@@ -89,7 +89,7 @@ obj.bar = 1
 
 然而，多年以来社区一直尝试用各种手段来“模拟”类的行为，具体如下：
 
-### 函数 prototype
+### 函数 prototype 对象
 
 函数有个特性：所有的**函数默认都拥有一个名为 `prototype` 的公有不可枚举属性**，他会指向另一个对象。而一个普通的对象，并不会自带这个 `prototype` 属性。
 
@@ -103,7 +103,7 @@ foo.prototype  // {constructor: ƒ}
 
 这个对象通常叫做 “Foo 的原型” ；**这又造成了极大的误导！他只是一个普通对象**，和原型链其实没有实际的关联。
 
-只是我们通常会把某一个对象的 `[[prototype]]` 链接到这个对象上而已；又或者是在 `new` 调用时发生的自动绑定：
+只是我们通常会把某一个对象的 `[[prototype]]` 链接到这个对象上而已；又或者是在 `new` 调用时会将它所返回的对象的 `[[prototype]]` 链接到函数的 `prototype` 对象上：
 
 ```javascript
 function foo() {}
@@ -115,4 +115,37 @@ const bar = new foo()
 Object.getPrototypeOf(bar) === foo.prototype    // true 
 ```
 
+> &#x20;其实将 `[[Prototype]]` 链接到 `prototype` 对象上不过是 `new` 的一个副作用；可以使用 `Object.create()` 来更加直接显式的将两个对象“关联”起来（后文详细展开）
+
+### constructor 属性
+
+函数的 `prototype` 对象中默认也有一个 `constructor` 属性，他在函数声明时自动创建。
+
+而这个 `constructor` 又指向所关联的函数：
+
+```javascript
+function foo() {}
+
+foo.prototype.constructor === foo   // true
+```
+
+紧接着，观察下面代码：
+
+```javascript
+function foo() {}
+
+// new 调用自动将 bar 的 [[Prototype]] 链到 foo.prototype
+var bar = new foo()
+
+// 所以，bar 本身并没有 constructor
+// 他是顺着原型链找到了上一级 foo.protype
+bar.constructor === foo.prototype.constructor   // true
+```
+
+上面的这种写法，配合着 `new` ，`constructor` 让我们很容易和面向对象中类的相似概念混淆在一起
+
+其实，`bar.constructor` 不过是顺着原型链查找到的；而且原型链的创建也是因为 `new` 的一个副作用而已
+
+> 长久以来社区为了尽可能的实现“模拟类”的行为，甚至有一种约定： `new` 调用的函数名必须首字母大写
 >
+> 然而，无论他是否是大写，它本质上就是一个函数。`new` 也不过只是一种特殊的调用方式而已！

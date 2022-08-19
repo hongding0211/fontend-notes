@@ -6,7 +6,7 @@
 
 JavaScript 中几乎所有对象都有**一个特殊的 `[[Prototype]]` 属性**，**它其实就是对另一个对象的引用。**
 
-> 好好领悟上面这句话：每个对象都有个 `[[Prototype]]` 属性，它指向的其实就是一个**对象**。
+> 仔细体会上面这句话：每个对象都有个 `[[Prototype]]` 属性，它指向的其实就是一个**对象**。
 >
 > 这个对象**和其他普通对象一样**，并没有什么神奇的地方！
 >
@@ -119,7 +119,7 @@ Object.getPrototypeOf(bar) === foo.prototype    // true
 
 ### constructor 属性
 
-函数的 `prototype` 对象中默认也有一个 `constructor` 属性，他在函数声明时自动创建。
+函数的 `prototype` 对象中默认还有一个 `constructor` 属性，他在函数声明时自动创建。
 
 而这个 `constructor` 又指向所关联的函数：
 

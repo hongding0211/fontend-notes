@@ -149,3 +149,162 @@ bar.constructor === foo.prototype.constructor   // true
 > 长久以来社区为了尽可能的实现“模拟类”的行为，甚至有一种约定： `new` 调用的函数名必须首字母大写
 >
 > 然而，无论他是否是大写，它本质上就是一个函数。`new` 也不过只是一种特殊的调用方式而已！
+
+不要把 `constructor` 理解为 “构造”，这个属性完全不能正确地 ”标识一个对象是否由另一个构造”；参照以下代码：
+
+```javascript
+function foo() {}
+
+foo.prototype = {}
+
+var bar = new foo()
+
+bar.constructor    // f Object()
+```
+
+虽然 `bar` 是通过 `foo()` ”new 出来的“ ，但是 `bar` 的 `constructor` 属性并不指向 `foo()` ，反而是指向 `Object()` （通过原型委托）
+
+千万**不要有这样错误地认识！**
+
+### 原型和类的区别
+
+在面向对象的语言中，类本质上就是进行“复制”。
+
+然而，在 JavaScript 当中，尽管可以使用原型来模拟“类”的行为，但是一个最大的区别就是：原型并没有复制操作，仅仅是用委托关联到了另一个对象之上。
+
+### 典型的“原型风格”
+
+下面的代码是一种典型的使用原型来模拟类的行为：
+
+```javascript
+function Foo(name) {
+    this.name = name
+}
+
+Foo.prototype.myName = function() {
+    return this.name
+}
+
+function Bar(name, label) {
+    Foo.call(this, name)    // 盗用构造
+    this.label = label
+}
+
+// Object.create() 创建一个新对象
+// 并且把这个对象的 [[prototype]] 链接到指定对象
+Bar.prototype = Object.create(Foo.prototype)
+
+// 修复丢失的 constructor 属性（如果你需要的话）
+// 不然他会“错误地”指向 Foo
+Bar.prototype.constructor = Bar
+
+Bar.prototype.myLabel = function() {
+    return this.label
+}
+
+var a = new Bar('a', 'obj a')
+
+a.myName()  // a
+a.myLabel() // obj a
+
+```
+
+注意，下面的两种写法都是错误的：
+
+```javascript
+// 只是把 Bar 的 prototype 指向了 Foo 的 prototype
+// 而并非创建一个新对象并且链接 [[prototype]]
+Bar.prototype = Foo.prototype
+
+// 基本上正确，的确创建了新对象并且链接了 [[prototype]]
+// 但是 new 本质上是一次 “函数调用”；因此在函数内部可能会执行一些不想要的 “副作用”
+Bar.prototype = new Foo()
+
+```
+
+## 如何链接 \[\[prototype]]
+
+可以通过以下几种方式来将一个对象的 `[[prototype]]` 链接到另一个对象：
+
+* `Object.create()`（创建一个新对象，链接到目标对象）
+* 使用 `.__proto__ 来设置`
+* `Object.setPrototypeOf()`
+
+例如对于上面 “模拟类” 的实现代码中，可以使用 `setPrototypeOf()` 来替换原先的 `Object.create()` 写法：
+
+```javascript
+// 可以将这种写法替换为下面这种：
+Bar.prototype = Object.create(Foo.prototype)
+
+Object.setPrototypeOf(Bar.prototype, Foo.prototype)
+```
+
+第二种做法的 “好处” 就是：不会因为 `Object.create` 创建了一个 ”新对象“ 从而覆盖掉了默认的 `prototype` 对象，还需要重新 “修复” `constructor` 属性；并且被覆盖的对象还需要被 GC。
+
+**不过被上面这种写法过于限制思想，为什么一定要模拟类的行为？**
+
+**为什么一定要将一个对象的 `prototype` 对象的 `[[prototype]]` 链接到另一个对象的 `prototype` 对象上面？为什么不能直接将一个对象 “关联” 到另一个对象上面？**
+
+**在后文中，会展开介绍一种新的 “面向原型” 的设计方式**
+
+## 检查原型链
+
+### instanceof
+
+`instanceof` 操作符左边是 “对象”，右边是 “函数”；它检查的是：
+
+**在这个 “对象” 的整条原型链上，是否有指向该 “函数” 的 `prototype` 对象？**&#x20;
+
+```javascript
+function foo() {}
+
+const bar = new foo()
+
+bar instanceof foo  // true
+```
+
+> `instanceof` 只能检查一个对象和一个函数的 `prototype` 对象之间的关联，**实属有点丑陋！**而且又会给人一种 “类” 的错觉
+
+使用 `bind()` 方法返回的包装函数，不会有 `prototype` 属性；如果对该包装函数使用 `instanceof` ，实际上会使用 `bind()` 的目标函数的 `prototype` 属性。
+
+### Object.prototype.isPrototypeOf()
+
+你不能通过 `instanceof` 关键字来**直接判断两个对象之间的关系；**如果硬要实现，可以通过下面这种丑陋的方式：
+
+```javascript
+var obj1 = {}
+var obj2 = {}
+
+// obj1 的 [[prototype]] 链接到了 obj2 
+Object.setPrototypeOf(obj1, obj2)
+
+// 创建一个临时函数
+// 并设置它的 prototype 为需要检测的对象
+function foo() {}
+foo.prototype = obj2
+
+// 借用这个临时函数就可以判断 obj1 的 [[prototype]] 是否链接到了 obj2
+obj1 instanceof foo    // true
+```
+
+借助 `Object.prototype.isPrototypeOf()` 就可以实现：
+
+```javascript
+obj2.isPrototypeOf(obj1)    // true
+```
+
+它检查的是：目标对象 (obj1 )的原型链上，是否存在自己 (obj2)
+
+### Object.getPrototypeOf()
+
+我们可以使用标准的 `Object.getPrototypeOf()` 来检查一个对象的 `[[prototype]]` 属性，从而避免使用 `.__proto__` 这样的写法：
+
+```javascript
+Object.getPrototypeOf(obj1) === obj2    // true
+```
+
+## 原型链
+
+> 未完待续
+
+<figure><img src="../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>

@@ -302,9 +302,3 @@ obj2.isPrototypeOf(obj1)    // true
 ```javascript
 Object.getPrototypeOf(obj1) === obj2    // true
 ```
-
-## 原型链
-
-> 未完待续
-
-<figure><img src="../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>

@@ -328,6 +328,8 @@ foo.call(DMZ)
 
 具体来说，箭头函数内的 `this` 会继承外层函数的 `this` 绑定：
 
+> 箭头函数压根没有 `this` ，他只是继承
+
 ```javascript
 function foo() {
     // 箭头函数内的 this 绑定至 foo() 中的 this
@@ -403,4 +405,21 @@ var obj = {
 var a = 'opps, global'
 
 foo.call(obj)   // 0
+```
+
+### 在对象内使用箭头函数
+
+通常，我们会在函数内使用箭头函数；这个箭头函数的 `this` 会捕获所在函数的词法作用域。
+
+但是，如果一个对象的某个属性持有一个箭头函数呢？就像这样：
+
+```javascript
+var a = 'global'
+
+var obj = {  // 并不创建一个作用域
+  a: 'obj',
+  foo: () => console.log(this.a)
+}
+
+obj.foo() // 'global'
 ```

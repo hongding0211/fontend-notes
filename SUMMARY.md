@@ -10,7 +10,6 @@
   * [bind()](javascript/this/bind.md)
 * [原型](javascript/yuan-xing/README.md)
   * [Object.create()](javascript/yuan-xing/object.create.md)
-  * [行为委托](javascript/yuan-xing/hang-wei-wei-tuo.md)
   * [模拟“类”](javascript/yuan-xing/mo-ni-lei.md)
   * [ES6 Class](javascript/yuan-xing/es6-class.md)
   * [Function](javascript/yuan-xing/function.md)

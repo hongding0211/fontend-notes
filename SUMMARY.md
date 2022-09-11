@@ -14,7 +14,7 @@
   * [ES6 Class](javascript/yuan-xing/es6-class.md)
   * [Function](javascript/yuan-xing/function.md)
 * [对象](javascript/dui-xiang.md)
-* [类型 & 值](javascript/lei-xing-zhi/README.md)
+* [类型 & 值](javascript/lei-xing-zhuan-huan.md)
   * [原生函数](javascript/lei-xing-zhi/yuan-sheng-han-shu.md)
   * [数组](javascript/lei-xing-zhi/shu-zu.md)
   * [字符串](javascript/lei-xing-zhi/zi-fu-chuan.md)

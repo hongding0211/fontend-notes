@@ -1,4 +1,4 @@
-# 类型转换
+# 类型 & 值
 
 ## 内置类型
 
@@ -237,3 +237,80 @@ Number(!![])    // 1, 先使用 !! 保证传入的是 boolean；否则可能会�
 '0' == true     // false，'0' 虽然不是假值，但是结果并不是 true
 ```
 
+正确的过程是：会将其中的 boolean 值转换为 Number，然后再比较
+
+因此，下述表达式就能返回 `true`&#x20;
+
+```javascript
+'0' == false // false 被先转换成了 0，再比较 '0' == 0
+```
+
+这里有一个坑就是你很容易以为这里会对 ”非 boolean“ 的那个值做一次隐式转换将其变为 boolean。但事实完全相反，我们会将那个 boolean 值转换为 1 或者 0；然后在执行比较！
+
+但是你可以通过 `!!` 进行显式转换：
+
+```javascript
+var a = '42'
+
+a == true    // false, 实际比较的是 '42' == 1
+!!a == true  // true
+```
+
+### null 和 undefined 比较
+
+在 `==` 时，`null` 和 `undefined` 是相等的
+
+```javascript
+null == undefined    // true
+```
+
+注意，只有 `null` 和 `undefined` 之间的 `==` 是返回 `true` 的，但是如果他们和其他 “假值" 进行比较，都不会返回 `true` ：
+
+```javascript
+null == 0          // false
+undefined == ''    // false
+null == false      // false
+```
+
+### 对象和非对象之间比较
+
+如果将一个对象（对象、数组、函数）和一个基本类型（string、number、boolean）进行比较，规则如下：
+
+使用 `ToPrimitive` 抽象操作将对象转换为基本类型，再执行比较。
+
+> 需要注意的是，如果非对象是一个 boolean；则会想将其转换为数字。
+
+```javascript
+[42] == 42    // true
+```
+
+## 抽象关系比较
+
+在执行 `a < b` 判断的时候，如果两边类型不同；也会发生隐式转换
+
+* 如果双方都是字符串，则按照字母顺序来比较
+* 不然的话，双方都先调用 `ToPrimitive` ，如果出现非字符串，则再统一执行 `ToNumber` 转换为数字后再比较
+
+```javascript
+[42] < ['43']    // true，实际上是比较 '42' < '43'
+```
+
+不过有些情况就比较特别了，注意仔细甄别：
+
+```javascript
+var a = { n: 42 }
+var b = { n: 43 }
+
+a < b    // false，实际上是比较 '[object Object]' < '[object Object]'
+a == b   // false，这里比较的只是引用；没有 ToPrimitive 操作哦
+```
+
+然而，更让你意外的是：
+
+```javascript
+a <= b    // true
+```
+
+这是因为，JavaScript 中 `<=` 操作其实是 `!(a > b)` ，因此上面的结果返回 `true`
+
+另外需要指出：与 `===` 不同的是，关系比较没有 ”严格比较“。因此当两边类型不同时，会发生隐式转换。请**尽量保证两边比较的类型时相同的**！

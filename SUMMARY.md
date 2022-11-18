@@ -117,3 +117,9 @@
 ## Others
 
 * [小程序与原生 Web 的区别](others/miniapp.md)
+
+## SSO
+
+* [About](sso/about.md)
+* [API Doc](sso/api-doc.md)
+* [接入指南](sso/jie-ru-zhi-nan.md)

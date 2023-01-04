@@ -61,6 +61,10 @@
 * [Route v6](react-libraries/route/README.md)
   * [Quick Start](react-libraries/route/route-v6.md)
 
+***
+
+* [Reactivity](reactivity.md)
+
 ## Vue
 
 * [深入理解](vue/shen-ru-li-jie/README.md)

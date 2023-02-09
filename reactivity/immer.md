@@ -61,7 +61,7 @@ Immer 采用的是递归 freeze，因此 当数据比较大的时候，可能会
 
 ## 工作原理
 
-<figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption><p>绿圈 - 原始数据；蓝色圆环 - Proxy</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6) (1).png" alt=""><figcaption><p>绿圈 - 原始数据；蓝色圆环 - Proxy</p></figcaption></figure>
 
 当 `producer` 开始执行的时候，只有 `draft` 的根节点的有一层 `proxy` 。一旦你往下访问了任意一个非原始数据类型（引用类型）的时候，就会自动为这个结点创建一层 `proxy` ，最终生成如上图这样的一棵 proxied tree。
 

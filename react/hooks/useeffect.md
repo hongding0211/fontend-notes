@@ -14,6 +14,12 @@
 * 很多时候 componentDidMount 和 componentDidUpdate 内部执行的逻辑是相同的，组件在首次和后续更新中都需要执行某一 Effect，而代码却没有被复用。
 * componentDidMount 和 componentWillUnmount 其实也是对应的，在组件挂载时执行了某一副作用（如消息订阅），在卸载之前也应该负责清除。
 
+### 执行顺序
+
+* 第一次调用时，只执行传进去的 `setup` 函数
+* 在 rerender 时，如果给的 `dependencies` 发生了变化；先执行清理函数（使用上一次的 state），再执行新的 effect
+* 当组件被移除 DOM 时，会再一次执行清理函数
+
 ### 执行 Effect
 
 通过 `useEffect()` 可以让 React **在渲染后执行某些操作**。

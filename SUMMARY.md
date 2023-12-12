@@ -59,6 +59,7 @@
   * [如何持久化 Redux 数据](react-libraries/redux/persist.md)
   * [异步操作](react-libraries/redux/async.md)
   * [性能优化](react-libraries/redux/xing-neng-you-hua.md)
+  * [Dive into immutability](react-libraries/redux/dive-into-immutability.md)
 * [Route v6](react-libraries/route/README.md)
   * [Quick Start](react-libraries/route/route-v6.md)
 

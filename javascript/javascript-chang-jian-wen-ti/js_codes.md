@@ -1,45 +1,104 @@
 # 手写实现
 
-### Math.min() vs Math.max()
+### 无重复最大子串
 
-```js
-var min = Math.min();		// 没有参数是默认 Infinity
-max = Math.max();				// 没有参数是默认 -Infinity
-console.log(min < max);	// false
+```javascript
+var lengthOfLongestSubstring = function(s) {
+  if (s.length < 2) {
+    return s.length
+  }
+
+  function findNoDuplicate(start) {
+    const set = new Set()
+    let i = start
+    for (; i < s.length && !set.has(s[i]); i++) {
+      set.add(s[i])
+    }
+    return i
+  }
+
+  let p1 = 0
+  let p2 = 0
+
+  let maxCnt = 0
+
+  while (p1 < s.length) {
+    p2 = findNoDuplicate(p1)
+    maxCnt = Math.max(maxCnt, p2 - p1)
+    p1 += 1
+  }
+
+  return maxCnt
+};
 ```
 
-### Object.create()
+### 三数之和
 
-```js
-var company = {
-    address: 'beijing'
+```javascript
+var threeSum = function (nums) {
+  const res = []
+  nums.sort((a, b) => a - b)
+  for (let i = 0; i <= nums.length - 3; i++) {
+    if (i > 0 && nums[i] === nums[i - 1]) {
+      continue
+    }
+    let p1 = i + 1
+    let p2 = nums.length - 1
+    while (p1 < p2) {
+      const sum = nums[p1] + nums[p2] + nums[i]
+      if (sum === 0) {
+        res.push([nums[i], nums[p1], nums[p2]])
+        while (p1 < p2 && nums[p1] === nums[p1 + 1]) {
+          p1 += 1
+        }
+        while (p1 < p2 && nums[p2] === nums[p2 - 1]) {
+          p2 -= 1
+        }
+        p1 += 1
+        p2 -= 1
+      } else if (sum < 0) {
+        p1 += 1
+      } else {
+        p2 -= 1
+      }
+    }
+  }
+  return res
 }
-var yideng = Object.create(company);
-delete yideng.address
-console.log(yideng.address);	// beijing，实际上还是指向的是 company
 ```
 
-这里的 yideng 通过 prototype 继承了 company的 address。yideng自己并没有address属性。所以delete操作符的作用是无效的。
+### 翻转列表（part）
 
-### 使用 setInterval 请求数据，顺序不一致
+```javascript
+var reverseBetween = function(head, left, right) {
+  if (left === right) {
+    return head
+  }
+  
+  const dumb = new ListNode(0, head)
 
-服务器不稳定时，后一个结果可能比前一个先到达
+  let p = dumb
+  
+  for (let i = 0; i < left - 1; i++) {
+    p = p.next
+  }
+  
+  const leftStart = p
 
-```js
-setInterval(function() {
-    $.get("/path/to/server", function(data, status) {
-        console.log(data);
-    });
-}, 100)
+  p = p.next`9`
+
+  for (let i = 0; i < right - left; i++) {
+    const q = p.next
+    p.next = q.next
+    q.next = leftStart.next
+    leftStart.next = q
+  }
+
+  return dumb.next
+};
 ```
 
-改用 setTimeOut
-
-```js
-function get() {
-  fetch('...').then( v => setTimeout(get, 100))
-}
-```
+###
 
 ### 防抖
 

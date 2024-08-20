@@ -1,5 +1,48 @@
 # 手写实现
 
+### Promise.finally
+
+```javascript
+Promise.prototype.finally = function (callback) {
+  return this.then((data) => {
+    return Promise.resolve(callback()).then(() => data); // data 上一个promise的成功态
+  }, err => {
+    return Promise.resolve(callback()).then(() => {
+      throw err; // 把之前的失败的err，抛出去
+    });
+  })
+}
+```
+
+### 接雨水
+
+```javascript
+var trap = function(height) {
+    const n = height.length;
+    if (n == 0) {
+        return 0;
+    }
+
+    const leftMax = new Array(n).fill(0);
+    leftMax[0] = height[0];
+    for (let i = 1; i < n; ++i) {
+        leftMax[i] = Math.max(leftMax[i - 1], height[i]);
+    }
+
+    const rightMax = new Array(n).fill(0);
+    rightMax[n - 1] = height[n - 1];
+    for (let i = n - 2; i >= 0; --i) {
+        rightMax[i] = Math.max(rightMax[i + 1], height[i]);
+    }
+
+    let ans = 0;
+    for (let i = 0; i < n; ++i) {
+        ans += Math.min(leftMax[i], rightMax[i]) - height[i];
+    }
+    return ans;
+};
+```
+
 ### 无重复最大子串
 
 ```javascript
